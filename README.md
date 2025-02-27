@@ -15,7 +15,7 @@ In addition to implementing these endpoints, you will handle callback responses 
 
 ### Database
 
-The database helpers can be found under `db/db_helpers.go`, and the migration/init file is under `db/init.sql`.
+The database helpers can be found under `db/db_helpers.go`, and the migration/init file is under `db/1_init.up.sql`.
 
 **Hint:** The project has Docker configured, which includes PostgreSQL, Kafka, and Redis, making it easier for you to get started. However, it's not mandatory to use these services in your solution. The decision to use them depends on the architecture you design for this task.
 
@@ -23,7 +23,7 @@ The database helpers can be found under `db/db_helpers.go`, and the migration/in
 
 - **`api/router.go`**: The `/deposit` and `/withdrawal` endpoints are pre-defined using `gorilla/mux`.
 - **`db_helpers.go`**: This file contains helper functions for interacting with the database, such as CRUD operations.
-- **`db/init.sql`**: This is the SQL file used for the database migrations. It defines the schema for the `gateways`, `countries`, `transactions`, and `users` tables.
+- **`db/1_init.up.sql`**: This is the SQL file used for the database migrations. It defines the schema for the `gateways`, `countries`, `transactions`, and `users` tables.
 - **`kafka/publisher.go`**: This file contains helper functions for publishing messages to Kafka.
 - **`services/data_format_services.go`**: This file contains functions to decode the request based on the data format (content type). You are required to create a similar function for encoding the response.
 - **`services/fault_tolerance.go`**: This file contains helper functions for implementing fault tolerance such as circuit breakers and retry mechanisms.
@@ -79,7 +79,7 @@ The database helpers can be found under `db/db_helpers.go`, and the migration/in
     - Application on port `8080`
 
 3. **Database Migration:**
-    The migration file `db/init.sql` is already provided. Once the Docker services are up and running, the database will be initialized automatically, and the tables will be created.
+    The migration file `db/1_init.up.sql` is already provided. Once the Docker services are up and running, the database will be initialized automatically, and the tables will be created.
 
 
 ### Deliverables
@@ -94,7 +94,7 @@ The database helpers can be found under `db/db_helpers.go`, and the migration/in
 ### Important Files
 
 - **`db/db_helpers.go`**: Helper functions for interacting with the database.
-- **`db/init.sql`**: SQL migration file to initialize the database.
+- **`db/1_init.up.sql`**: SQL migration file to initialize the database.
 - **`api/router.go`**: Defines the API routes (`/deposit` and `/withdrawal`).
 - **`services/data_format_services.go`**: Functions for handling different data formats.
 - **`services/fault_tolerance.go`**: Functions for implementing fault tolerance, including retries and circuit breakers.

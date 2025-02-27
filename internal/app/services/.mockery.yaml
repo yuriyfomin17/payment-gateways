@@ -1,0 +1,17 @@
+with-expecter: true
+dir: "mocks"
+outpkg: "mocks"
+mockname: "{{.InterfaceNameCamel}}"
+filename: "{{.InterfaceNameSnake}}_mock.go"
+packages:
+  payment-gateway/internal/app/services:
+    interfaces:
+      DataEncryptor:
+      FaultTolerance:
+      TransactionPublisherService:
+      RedisService:
+      CountryRepository:
+      TransactionRepository:
+      UserRepository:
+      GatewayRepository:
+      RabbitMqService:

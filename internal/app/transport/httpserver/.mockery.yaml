@@ -1,0 +1,10 @@
+with-expecter: true
+dir: "mocks"
+outpkg: "mocks"
+mockname: "{{.InterfaceNameCamel}}"
+filename: "{{.InterfaceNameSnake}}_mock.go"
+packages:
+  payment-gateway/internal/app/transport/httpserver:
+    interfaces:
+      UserService:
+      GatewayService:

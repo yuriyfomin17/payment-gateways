@@ -1,25 +1,46 @@
-FROM golang:1.19-alpine
+# Start from a small, secure base image
+FROM golang:1.23-alpine AS builder
 
-# Set up environment and install necessary packages
-RUN apk add --no-cache git netcat-openbsd gcc musl-dev
-
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy go.mod and go.sum
+# Copy the Go module files
 COPY go.mod go.sum ./
 
-# Download dependencies
+# Download the Go module dependencies
 RUN go mod download
 
-# Copy the rest of the application
+# Copy the source code into the container
 COPY . .
 
-# Set the working directory to cmd where the main.go is located
-WORKDIR /app/cmd
+# Build the Go binary
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app ./cmd/main.go
 
-# Build the Go app
-RUN go build -o /app/main .
+# Create a minimal production image
+FROM alpine:latest
 
-# Command to run the executable
-CMD ["/app/main"]
+# It's essential to regularly update the packages within the image to include security patches
+# Also install bash to run wait-for-it.sh
+RUN apk update && apk upgrade && apk add bash
+
+# Reduce image size
+RUN rm -rf /var/cache/apk/* && \
+    rm -rf /tmp/*
+
+# Avoid running code as a root user
+RUN adduser -D appuser
+USER appuser
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy only the necessary files from the builder stage
+COPY --from=builder /app/app .
+COPY --from=builder /app/cmd/wait-for-it.sh .
+COPY --from=builder /app/internal/app/migrations ./migrations
+
+# Expose the port that the application listens on
+EXPOSE 8080
+
+# Run the binary when the container starts
+CMD ["./app"]
